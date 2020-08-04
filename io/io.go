@@ -1,7 +1,9 @@
 package io
 
 import (
+	"fmt"
 	"io/ioutil"
+	"os"
 	"regexp"
 	"testing"
 )
@@ -15,6 +17,11 @@ func TestDirectory(t *testing.T) string {
 		t.Fatal(err)
 		return ""
 	} else {
+		t.Cleanup(func() {
+			if err := os.RemoveAll(dir); err != nil {
+				_, _ = os.Stderr.WriteString(fmt.Sprintf("Unable to remove temporary directory for test (%s): %v\n", dir, err))
+			}
+		})
 		return dir
 	}
 }
